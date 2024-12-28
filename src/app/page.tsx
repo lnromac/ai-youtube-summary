@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client'
 
 import { useState, type Dispatch, type SetStateAction } from 'react';
@@ -47,18 +46,18 @@ const getSummary = async (youtubeVideo: string, setSummary: Dispatch<SetStateAct
     let retryDelay = 2000;
 
     // Process each chunk directly (removed consolidation logic)
-    for (const chunk of chunks) {
+    for (let i = 0; i < chunks.length; i++) {
+      const chunk = chunks[i];
       let success = false;
       let attempts = 0;
       const maxAttempts = 5;
 
       while (!success && attempts < maxAttempts) {
         try {
-          // @ts-expect-error @ts-ignore
-          setSummary(`Processing section ${chunks.indexOf(chunk) + 1}/${chunks.length}...`);
+          setSummary(`Processing section ${i + 1}/${chunks.length}...`);
           
           const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST', 
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`
@@ -66,8 +65,8 @@ const getSummary = async (youtubeVideo: string, setSummary: Dispatch<SetStateAct
             body: JSON.stringify({
               model: 'gpt-3.5-turbo',
               messages: [
-                { 
-                  role: 'system', 
+                {
+                  role: 'system',
                   content: `Analyze this video transcript section and provide a structured summary following these guidelines:
 - Extract 3-5 key points from this section
 - Format each point as a bullet point starting with "•"
@@ -76,9 +75,9 @@ const getSummary = async (youtubeVideo: string, setSummary: Dispatch<SetStateAct
 - Keep each point concise but informative
 - Maintain chronological order if relevant`
                 },
-                { 
-                  role: 'user', 
-                  content: chunk 
+                {
+                  role: 'user',
+                  content: chunk
                 }
               ]
             })
@@ -119,7 +118,7 @@ const getSummary = async (youtubeVideo: string, setSummary: Dispatch<SetStateAct
 
 export default function Home() {
   const [youtubeVideo, setYoutubeVideo] = useState('');
-  const [summary, setSummary] = useState('');
+  const [summary, setSummary] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
