@@ -68,12 +68,13 @@ const getSummary = async (youtubeVideo: string, setSummary: Dispatch<SetStateAct
                 {
                   role: 'system',
                   content: `Analyze this video transcript section and provide a structured summary following these guidelines:
-- Extract 3-5 key points from this section
-- Format each point as a bullet point starting with "•"
-- Focus on concrete information, facts, and main ideas
-- Ignore repetitive content and filler words
-- Keep each point concise but informative
-- Maintain chronological order if relevant`
+                      - Extract 3-5 key points from this section
+                      - Format each point as a bullet point starting with "•"
+                      - Focus on concrete information, facts, and main ideas
+                      - Ignore repetitive content and filler words
+                      - Keep each point concise but informative
+                      - Maintain chronological order if relevant
+                  `
                 },
                 {
                   role: 'user',
